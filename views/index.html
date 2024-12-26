@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Spotify Song Finder</title>
+</head>
+<body>
+<div class="container">
+    <h1>Spotify Song Finder</h1>
+    <form id="searchForm">
+        <input type="text" name="query" id="query" placeholder="Enter a song or artist name" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="results"></div>
+</div>
+
+<script>
+    document.getElementById('searchForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const query = document.getElementById('query').value;
+
+        // Fetch search results
+        const response = await fetch('/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query }),
+        });
+
+        const data = await response.json();
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '';
+
+        if (data.success) {
+            data.tracks.forEach(track => {
+                const trackElement = document.createElement('div');
+                trackElement.className = 'track';
+
+                trackElement.innerHTML = `
+            <img src="${track.image}" alt="Album Art">
+            <p><strong>Song:</strong> ${track.name}</p>
+            <p><strong>Artists:</strong> ${track.artists}</p>
+            <p><strong>Album:</strong> ${track.album}</p>
+            <p><strong>Release Date:</strong> ${track.release_date}</p>
+            <p><strong>Duration:</strong> ${track.duration} minutes</p>
+            <a href="${track.link}" target="_blank">Listen on Spotify</a>
+          `;
+
+                resultsDiv.appendChild(trackElement);
+            });
+        } else {
+            resultsDiv.innerHTML = '<p>Error fetching tracks. Please try again.</p>';
+        }
+    });
+</script>
+</body>
+</html>
