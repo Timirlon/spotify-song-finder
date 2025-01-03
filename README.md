@@ -5,4 +5,4 @@
 2. Navigate to the project directory using terminal.
 3. Run `npm install` terminal command
 4. Then, `node server.js`
-5. When server is launched you can use the calculator, following <a href="https://localhost:3000">`https://localhost:3000`</a>
+5. When server is launched you can use the calculator, following <a href="https://localhost:3000">`https://localhost:3030`</a>
